@@ -36,6 +36,15 @@ app.post('/users',(req,res) => {
   });
 });
 
+app.delete('/users/me/token', authenticate, (req, res) => {
+  console.log(req.token);
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  })
+})
+
 app.post('/users/login', (req,res) => {
   let body = _.pick(req.body, ['email','password']);
   User.findByCredentials(body.email, body.password).then((user) => {
